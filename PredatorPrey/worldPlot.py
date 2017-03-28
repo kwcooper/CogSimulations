@@ -89,16 +89,12 @@ class Prey:
             color = (random.random(),random.random(),random.random())
             self.turtle.color(color)
 
-    def think(self):
-        if self.memory >= self.sensor:
-            self.o = random.random()*2*math.pi
-        
-    def move(self):
-        self.x += self.v * math.cos(self.o)
-        self.y += self.v * math.sin(self.o)
-        if self.turtleON:
-            self.turtle.setpos(int(self.x),int(self.y))
-    
+    def distance(self):
+        return math.sqrt((self.x)**2 + (self.y)**2)
+
+    def distanceTo(self,other):
+        return math.sqrt((self.x-other.x)**2 + (self.y-other.y)**2)
+
     def sense1(self,other):
         self.memory = self.sensor    
         self.sensor = 1/(self.distanceTo(other))
@@ -117,11 +113,17 @@ class Prey:
                 self.su = 0
         n += 1
 
-    def distance(self):
-        return math.sqrt((self.x)**2 + (self.y)**2)
+    def think(self):
+        if self.memory >= self.sensor:
+            self.o = random.random()*2*math.pi
+        
+    def move(self):
+        self.x += self.v * math.cos(self.o)
+        self.y += self.v * math.sin(self.o)
+        if self.turtleON:
+            self.turtle.setpos(int(self.x),int(self.y))
+    
 
-    def distanceTo(self,other):
-        return math.sqrt((self.x-other.x)**2 + (self.y-other.y)**2)
 
         
 
