@@ -14,6 +14,8 @@ class Predator:
         self.animalMemCount = 9
         self.sensor = 0.0   ## current sensor stimuli
         self.memory = 0.0   ## past sensor stimuli
+        self.xbound = 2000
+        self.ybound = 2000
         self.turtleON = turtleON
         if turtleON:
             self.turtle = turtle.Turtle()
@@ -81,8 +83,13 @@ class Prey:
         self.y = random.randint(-100,100) # agent's y position
         self.o = random.random()*2*math.pi # agent's orientation
         self.v = v  # agent's velocity
+        self.su = 0 #agent speedup
+        self.animalMem = 0
+        self.animalMemCount = 0
         self.sensor = 0.0   ## current sensor stimuli
         self.memory = 0.0   ## past sensor stimuli
+        self.xbound = 100
+        self.ybound = 100
         self.turtleON = turtleON
         if turtleON:
             self.turtle = turtle.Turtle()
@@ -113,18 +120,38 @@ class Prey:
                 self.su = 0
         n += 1
 
-    def think(self):
+    def think1(self):
         if self.memory >= self.sensor:
             self.o = random.random()*2*math.pi
-        
-    def move(self):
+
+    def think(self, others):
+            target = others[self.animalMem]
+            dx = (target.x + self.x)
+            dy = (target.y + self.y)
+            ideal = math.atan2(dy,dx)
+            self.o = ideal * random.random()
+                   
+    def move1(self):
         self.x += self.v * math.cos(self.o)
         self.y += self.v * math.sin(self.o)
         if self.turtleON:
             self.turtle.setpos(int(self.x),int(self.y))
     
 
+    def move(self):
+        print(self.x,self.y)
+        if self.x > self.xbound:
+            self.x = math.cos(math.pi)
+        else:
+            self.x += (self.v + self.su) * math.cos(self.o)
 
+        if self.y > self.ybound:
+            self.y =  math.sin(math.pi)
+        else:
+            self.y += (self.v + self.su) * math.sin(self.o)
+        
+        if self.turtleON:
+            self.turtle.setpos(int(self.x),int(self.y)) 
         
 
 

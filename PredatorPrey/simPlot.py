@@ -1,4 +1,4 @@
-import world
+import worldPlot as world
 import numpy as np
 import time
 
@@ -7,7 +7,7 @@ def sim(duration, preyNum, turt):
 ##    import random
     prey = []
     for ii in range(1, preyNum):
-        prey.append(world.Prey(11, turt))
+        prey.append(world.Prey(5, turt))
     
     pred = world.Predator(10, turt)      
     tme = 0
@@ -19,7 +19,8 @@ def sim(duration, preyNum, turt):
         pred.move()
 
         for animal in prey:
-            animal.think()
+            animal.sense([pred])
+            animal.think([pred])
             animal.move()
             dist.append(pred.distanceTo(animal))
             #eats animal code
