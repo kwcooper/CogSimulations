@@ -1,4 +1,5 @@
 from numpy import exp, array, random, dot
+import matplotlib.pyplot as plt
 
 class Layer():
     def __init__(self, numNeurons, numInputs):
@@ -21,32 +22,31 @@ class NeuralNetwork():
         self.layer2 = layer2
 
 
-    # The neural network thinks.
-    def think(self, inputs):
+    # The network thinks.
+    def forward(self, inputs):
         outLayer1 = sigmoid(dot(inputs, self.layer1.synaptic_weights))
         outLayer2 = sigmoid(dot(outLayer1, self.layer2.synaptic_weights))
         return outLayer1, outLayer2
     
-    # We train the neural network through a process of trial and error.
-    # Adjusting the synaptic weights each time.
-    def train(self, training_set_inputs, training_set_outputs, number_of_training_iterations):
-        for iteration in range(number_of_training_iterations):
+    #
+    def train(self, trainingInputs, targets, iterations):
+        for iteration in range(iterations):
             # Pass the training set through our neural network
-            output_from_layer_1, output_from_layer_2 = self.think(training_set_inputs)
+            outputLayer1, outputLayer2 = self.forward(trainingInputs)
 
             # Calculate the error for layer 2 (The difference between the desired output
             # and the predicted output).
-            layer2_error = training_set_outputs - output_from_layer_2
-            layer2_delta = layer2_error * derivative(output_from_layer_2)
+            errorLayer2 = targets - outputLayer2
+            deltaLayer2 = errorLayer2 * derivative(outputLayer2)
 
             # Calculate the error for layer 1 (By looking at the weights in layer 1,
             # we can determine by how much layer 1 contributed to the error in layer 2).
-            layer1_error = layer2_delta.dot(self.layer2.synaptic_weights.T)
-            layer1_delta = layer1_error * derivative(output_from_layer_1)
+            errorLayer1 = deltaLayer2.dot(self.layer2.synaptic_weights.T)
+            deltaLayer1 = errorLayer1 * derivative(outputLayer1)
 
             # Calculate how much to adjust the weights by
-            layer1_adjustment = training_set_inputs.T.dot(layer1_delta)
-            layer2_adjustment = output_from_layer_1.T.dot(layer2_delta)
+            layer1_adjustment = trainingInputs.T.dot(deltaLayer1)
+            layer2_adjustment = outputLayer1.T.dot(deltaLayer2)
 
             # Adjust the weights.
             self.layer1.synaptic_weights += layer1_adjustment
@@ -57,6 +57,8 @@ class NeuralNetwork():
     def print_weights(self):
         print("    Layer 1 (4 neurons, each with 3 inputs): ")
         print(self.layer1.synaptic_weights)
+##        plt.matshow(self.layer1.synaptic_weights, cmap="Greys")
+##        plt.show()
         print( "    Layer 2 (1 neuron, with 4 inputs):")
         print(self.layer2.synaptic_weights)
 
@@ -80,19 +82,19 @@ class NeuralNetwork():
 ##
 ### The training set. We have 7 examples, each consisting of 3 input values
 ### and 1 output value.
-##training_set_inputs = array([[0, 0, 1], [0, 1, 1], [1, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 1], [0, 0, 0]])
-##training_set_outputs = array([[0, 1, 1, 1, 1, 0, 0]]).T
+##trainingInputs = array([[0, 0, 1], [0, 1, 1], [1, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 1], [0, 0, 0]])
+##targets = array([[0, 1, 1, 1, 1, 0, 0]]).T
 ##
 ### Train the neural network using the training set.
 ### Do it 60,000 times and make small adjustments each time.
-##neural_network.train(training_set_inputs, training_set_outputs, 60000)
+##neural_network.train(trainingInputs, targets, 60000)
 ##
 ##print( "Stage 2) New synaptic weights after training: ")
 ##neural_network.print_weights()
 ##
 ### Test the neural network with a new situation.
 ##print( "Stage 3) Considering a new situation [1, 1, 0] -> ?: ")
-##hidden_state, output = neural_network.think(array([1, 1, 0]))
+##hidden_state, output = neural_network.forward(array([1, 1, 0]))
 ##print( output)
 
 
@@ -111,19 +113,19 @@ neural_network.print_weights()
 
 # The training set. We have 7 examples, each consisting of 3 input values
 # and 1 output value.
-training_set_inputs = array([[0, 0], [0, 1], [1, 0], [1, 1]])
-training_set_outputs = array([[1, 0, 0, 1]]).T
+trainingInputs = array([[0, 0], [0, 1], [1, 0], [1, 1]])
+targets = array([[1, 0, 0, 1]]).T
 
 # Train the neural network using the training set.
 # Do it 60,000 times and make small adjustments each time.
-neural_network.train(training_set_inputs, training_set_outputs, 60000)
+neural_network.train(trainingInputs, targets, 60000)
 
 print( "Stage 2) New synaptic weights after training: ")
 neural_network.print_weights()
 
 # Test the neural network with a new situation.
 print( "Stage 3) Considering a new situation [1, 1] -> ?: ")
-hidden_state, output = neural_network.think(array([1, 1]))
+hidden_state, output = neural_network.forward(array([1, 1]))
 print( output)
 
 
