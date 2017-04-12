@@ -71,6 +71,7 @@ class Net():
         elif strt == True:
             pss = '(End)'
             # if you prefur imshow gradients...
+        plt.style.use('fivethirtyeight')
         plt.subplot(2,1,1)
         plt.imshow(self.layer1.weights, cmap="Greys", interpolation='nearest')
         plt.axis('off')
@@ -89,11 +90,13 @@ class Net():
         plt.show()
 
     def showAllErrors(self):
-        plt.plot(self.e1)
-        plt.plot(self.e2)
-        plt.plot(self.e3)
-        plt.plot(self.e4)
+        plt.plot(self.e1, label='e1')
+        plt.plot(self.e2, label='e2')
+        plt.plot(self.e3, label='e3')
+        plt.plot(self.e4, label='e4')
+        plt.style.use('fivethirtyeight')
         plt.title('Training Error')
+        plt.legend()
         plt.show()
 
 #run the network
