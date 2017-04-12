@@ -146,7 +146,7 @@ print( "Test the network")
 hidden, output = net.forward(array([1, 1]))
 print('We expect 1, we got: ', output)
 #print(hidden)
-
+#7
 
 
 
