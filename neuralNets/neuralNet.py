@@ -1,6 +1,7 @@
+#Keiland Cooper
+
 import random
 import numpy as np
-#from numpy import random, exp, array, dot
 import matplotlib.pyplot as plt
 
 class Layer():
@@ -129,13 +130,13 @@ print(' ')
 net.showError()
 net.showAllErrors()
 
-print( "Test the network")
+print( "Test the network: ")
 hidden, output = net.forward(np.array([1, 1]))
-print('We expect 1, we got: ', output)
+print('We expect 1, we got: ', "(", round(output[0]), ")", output)
 hidden, output = net.forward(np.array([1, 0]))
-print('We expect 0, we got: ', output)
+print('We expect 0, we got: ', "(", round(output[0]), ")", output)
 hidden, output = net.forward(np.array([0, 0]))
-print('We expect 1, we got: ', output)
+print('We expect 1, we got: ', "(", round(output[0]), ")", output)
 #print(hidden)
 
 #tests on a wide array of data
