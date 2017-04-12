@@ -1,11 +1,12 @@
 import random
-from numpy import random, exp, array, dot
+import numpy as np
+#from numpy import random, exp, array, dot
 import matplotlib.pyplot as plt
 
 class Layer():
     def __init__(self, numNeurons, numInputs):
         #creates a random matix of size (inputs by neurons)
-        self.weights = 2 * random.random((numInputs, numNeurons)) - 1
+        self.weights = 2 * np.random.random((numInputs, numNeurons)) - 1
 
 def sigmoid(x):
     return 1 / (1 + exp(-x))
@@ -30,8 +31,8 @@ class Net():
 
     # The network thinks.
     def forward(self, inputs):
-        outLayer1 = sigmoid(dot(inputs, self.layer1.weights))
-        outLayer2 = sigmoid(dot(outLayer1, self.layer2.weights))
+        outLayer1 = sigmoid(np.dot(inputs, self.layer1.weights))
+        outLayer2 = sigmoid(np.dot(outLayer1, self.layer2.weights))
         return outLayer1, outLayer2
     
     
@@ -50,11 +51,11 @@ class Net():
             self.e4.append(errorLayer2[3])
 
             
-            errorLayer1 = deltaLayer2.dot(self.layer2.weights.T)
+            errorLayer1 = deltaLayer2.np.dot(self.layer2.weights.T)
             deltaLayer1 = errorLayer1 * derivative(outputLayer1)
 
-            adjustmentLayer1 = trainingInputs.T.dot(deltaLayer1)
-            adjustmentLayer2 = outputLayer1.T.dot(deltaLayer2)
+            adjustmentLayer1 = trainingInputs.T.np.dot(deltaLayer1)
+            adjustmentLayer2 = outputLayer1.T.np.dot(deltaLayer2)
 
             self.layer1.weights += adjustmentLayer1
             self.layer2.weights += adjustmentLayer2
@@ -106,8 +107,8 @@ print('XOR problem')
 print("RANDOM WEIGHTS: ")
 net.showWeights(False)
 print(' ')
-trainingInputs = array([[0, 0], [0, 1], [1, 0], [1, 1]])
-targets = array([[1, 0, 0, 1]]).T
+trainingInputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+targets = np.array([[1, 0, 0, 1]]).T
 
 net.train(trainingInputs, targets, 60000)
 
@@ -146,7 +147,16 @@ print( "Test the network")
 hidden, output = net.forward(array([1, 1]))
 print('We expect 1, we got: ', output)
 #print(hidden)
-#7
+
+def tstArray(n):
+    outMat = np.zeros((n,n))
+    for ii in range(0,n):
+        for jj in range(0,n):
+            hidden, output = net.forward(array[ii,n, jj,n])
+            outMat[i,j] = output
+    plt.matshow(outMat)
+
+tstArray(30)
 
 
 
