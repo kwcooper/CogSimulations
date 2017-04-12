@@ -20,9 +20,13 @@ class Net():
     def __init__(self):
         self.layer1 = Layer(4, 2)
         self.layer2 = Layer(1, 4)
-
         self.startWeights = []
         self.errors = []
+
+        self.e1 = []
+        self.e2 = []
+        self.e3 = []
+        self.e4 = []
 
     # The network thinks.
     def forward(self, inputs):
@@ -36,9 +40,15 @@ class Net():
             outputLayer1, outputLayer2 = self.forward(trainingInputs)
 
             errorLayer2 = targets - outputLayer2
-            self.errors.append(errorLayer2)
-            print(errorLayer2)
             deltaLayer2 = errorLayer2 * derivative(outputLayer2)
+
+            self.errors.append(errorLayer2[0])
+
+            self.e1.append(errorLayer2[0])
+            self.e2.append(errorLayer2[1])
+            self.e3.append(errorLayer2[2])
+            self.e4.append(errorLayer2[3])
+
             
             errorLayer1 = deltaLayer2.dot(self.layer2.weights.T)
             deltaLayer1 = errorLayer1 * derivative(outputLayer1)
@@ -74,12 +84,22 @@ class Net():
 
     def showError(self):
         plt.plot(self.errors)
+        plt.style.use('fivethirtyeight')
+        plt.title('Training Error')
+        plt.show()
+
+    def showAllErrors(self):
+        plt.plot(self.e1)
+        plt.plot(self.e2)
+        plt.plot(self.e3)
+        plt.plot(self.e4)
         plt.title('Training Error')
         plt.show()
 
 #run the network
 net = Net()
 
+print('XOR problem')
 print("RANDOM WEIGHTS: ")
 net.showWeights(False)
 print(' ')
@@ -93,6 +113,31 @@ net.showWeights(True)
 print(' ')
 
 net.showError()
+net.showAllErrors()
+
+print( "Test the network")
+hidden, output = net.forward(array([1, 1]))
+print('We expect 1, we got: ', output)
+#print(hidden)
+
+print(' ')
+print('-------------------------------------------')
+
+net2 = Net()
+print('XOR problem')
+print("RANDOM WEIGHTS: ")
+net2.showWeights(False)
+print(' ')
+trainingInputs = array([[0, 0], [0, 1], [1, 0], [1, 1]])
+targets = array([[0,1,1,0]]).T
+
+net2.train(trainingInputs, targets, 60000)
+
+print("NEW WEIGHTS:")
+net2.showWeights(True)
+print(' ')
+
+net2.showError()
 
 print( "Test the network")
 hidden, output = net.forward(array([1, 1]))
