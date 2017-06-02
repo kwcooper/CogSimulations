@@ -71,9 +71,9 @@ cnt = int(np.ceil(steps/.025))
 step = 0
 
 while step < cnt:
-    
+    #iterate through each neuron, i
     for i in range(0, numNeurons):
-        I = getI(vMat, connect, i)
+        I = getI(vMat, connect, i, step)
 
         u = uMat[i][step]
         v = vMat[i][step]
@@ -99,8 +99,11 @@ while step < cnt:
         v = v + dt*dv
         u = u + dt*du
 
-        uN[i][step] = u
-        vN[i][step] = v
+        #update the next time step...
+        #has to be a better way to get around the out of bounds error
+        if step < 39:
+            uMat[i][step+1] = u
+            vMat[i][step+1] = v
         #print('new vMat:\n', vMat)
 
 ##    uMat = uN
