@@ -37,23 +37,24 @@ dtN = np.ones((numNeurons, maxTme), dtype=np.float32)
 vN = np.ones((numNeurons, maxTme), dtype=np.float32) 
 uN = np.ones((numNeurons, maxTme), dtype=np.float32)
 
+plt.subplot(1,3,1)
 connect = np.random.randint(2, size=(numNeurons, numNeurons))
-plt.matshow(connect, cmap=plt.cm.gray)
+plt.imshow(connect, cmap=plt.cm.gray)
 plt.title('connectome')
-plt.show()
 
+plt.subplot(1,3,2)
 fired = np.zeros((numNeurons, maxTme), dtype=np.float32)
-plt.matshow(fired, cmap=plt.cm.gray)
+plt.imshow(vMat, cmap=plt.cm.gray)
 plt.title('pre-fired')
-plt.show()
 
+plt.subplot(1,3,3)
 spikes = np.zeros((numNeurons, int(np.ceil(steps/.025))))
-plt.matshow(spikes, cmap=plt.cm.gray)
+plt.imshow(spikes, cmap=plt.cm.gray)
 plt.title('Spikes')
 plt.show()
 
 
-def getI(vMat, connect, i, step):
+def getI(vMat, connect, i, step, bias):
     #iterates through fired, if connection, then increments input I
     #Should make the 'bias' a parameter
     #this could be where hebbian learning etc. could be implimented
@@ -62,7 +63,7 @@ def getI(vMat, connect, i, step):
         if vMat[i][step] > 25 and connect[i][j] == 1:
             I += 1
     #print('Found ', I)
-    return I + 2
+    return I + bias
 
 
 #Simulation
@@ -73,7 +74,7 @@ step = 0
 while step < cnt:
     #iterate through each neuron, i
     for i in range(0, numNeurons):
-        I = getI(vMat, connect, i, step)
+        I = getI(vMat, connect, i, step, 0)
 
         u = uMat[i][step]
         v = vMat[i][step]
@@ -113,11 +114,11 @@ while step < cnt:
     t += dt
     step += 1
 
-    
-plt.matshow(spikes, cmap=plt.cm.gray)
+plt.subplot(1,2,1)
+plt.imshow(spikes, cmap=plt.cm.gray)
 plt.title('Post-Spikes')
-plt.show()
 
-plt.matshow(vMat, cmap=plt.cm.gray)
+plt.subplot(1,2,2)
+plt.imshow(vMat, cmap=plt.cm.gray)
 plt.title('Post-Voltage')
 plt.show()
