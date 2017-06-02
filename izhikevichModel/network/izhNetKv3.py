@@ -7,6 +7,7 @@ import networkx as nx
 
 numNeurons = 50
 steps = 1
+maxTme = int(np.ceil(steps/.025))
 
 
 #probably unessary...
@@ -19,25 +20,33 @@ dtMat = .025 *np.ones((numNeurons, 1), dtype=np.float32)
 ##dMat = 2. * np.ones((numNeurons, 1), dtype=np.float32)
 
 #vMat = -65. * np.ones((numNeurons, 1), dtype=np.float32)
-vMat = -65 * np.random.randint(2, size=(numNeurons, 1))
+vMat = -65 * np.random.randint(2, size=(numNeurons, maxTme))
 print('vMat:\n', vMat)
-uMat = 0. * np.random.randint(2, size=(numNeurons, 1))
+uMat = 0. * np.random.randint(2, size=(numNeurons, maxTme))
 
-dtN = np.ones((numNeurons, 1), dtype=np.float32)
-vN = np.ones((numNeurons, 1), dtype=np.float32) 
-uN = np.ones((numNeurons, 1), dtype=np.float32)
+dtN = np.ones((numNeurons, maxTme), dtype=np.float32)
+vN = np.ones((numNeurons, maxTme), dtype=np.float32) 
+uN = np.ones((numNeurons, maxTme), dtype=np.float32)
 
 connect = np.random.randint(2, size=(numNeurons, numNeurons))
 plt.matshow(connect, cmap=plt.cm.gray)
 plt.title('connectome')
 plt.show()
 
-fired = np.zeros((numNeurons, 1), dtype=np.float32)
+fired = np.zeros((numNeurons, maxTme), dtype=np.float32)
 plt.matshow(fired, cmap=plt.cm.gray)
-plt.title('fired')
+plt.title('pre-fired')
 plt.show()
 
+spikes = np.zeros((numNeurons, int(np.ceil(steps/.025))))
+plt.matshow(spikes, cmap=plt.cm.gray)
+plt.title('Spikes')
+plt.show()
+
+
 def getI(vMat, connect, i):
+    #iterates through fired, if connection, then increments input I
+    #Should make the 'bias' a parameter
     #this could be where hebbian learning etc. could be implimented
     I = 0
     for j in range(0, numNeurons):
@@ -46,14 +55,12 @@ def getI(vMat, connect, i):
     #print('Found ', I)
     return I + 2
 
-spikes = np.zeros((numNeurons, int(np.ceil(steps/.025))))
-plt.matshow(spikes, cmap=plt.cm.gray)
-plt.title('Spikes')
-plt.show()
 
+#Simulation
 t = 0
 cnt = int(np.ceil(steps/.025))
 step = 0
+
 while step < cnt:
     
     for i in range(0, numNeurons):
