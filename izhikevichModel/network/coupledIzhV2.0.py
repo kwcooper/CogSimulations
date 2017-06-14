@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-
-
-"""
 #Python implimentation of (Izhikevich 2003) "Simple Model of Spiking Neurons"
+#If cell A spikes, then Ib = 10
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -49,7 +46,7 @@ b = .2
 c = -65
 d = 2
 
-vi = -65
+vi = -70
 ui = b * vi #(izh 2003)
 vList.append(vi)
 uList.append(ui)
@@ -67,14 +64,10 @@ for i in range(time-1):
     uList.append(uOut)
 
 #Plotting
-plt.style.use('fivethirtyeight')
-plt.title('Regular Spiking')
-plt.xlabel('Time (ms)')
-plt.ylabel('Voltage (mV)')
-plt.plot(range(time), I[0], 'y', label='I')
-plt.plot(range(time), vList[0:4000], label='V')
-plt.show()
-
-
-
-
+#plt.style.use('fivethirtyeight')
+#plt.title('Regular Spiking')
+#plt.xlabel('Time (ms)')
+#plt.ylabel('Voltage (mV)')
+#plt.plot(range(time), I[0], 'y', label='I')
+#plt.plot(range(time), vList[0:4000], label='V')
+#plt.show()
