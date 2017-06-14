@@ -11,6 +11,10 @@ import matplotlib.pyplot as plt
 #   
 
 def izh(dt, v, u, a, b, c, d, I):
+        
+        if v > 30:
+            v = c
+            u = u + d
     
         dv = (.04 *( v ** 2)) + (5 * v) + 140 - u + I
         du = a * ((b*v) - u)
@@ -29,24 +33,39 @@ vList = []
 uList = []
 
 tmeSplt = time/2
+stmValue = 11
 I = np.append(np.zeros((1, tmeSplt), dtype=np.int32), 
-                 (10 * np.ones((1, tmeSplt), dtype=np.int32)), 1)
+                 (stmValue * np.ones((1, tmeSplt), dtype=np.int32)), 1)
+
+#Parameters
+a = .02
+b = .2
+c = -65
+d = 2
+
+vi = -65
+ui = b * vi #(izh 2003)
+vList.append(vi)
+uList.append(ui)
+
 t = 0
-for i in range(time):
+for i in range(time-1):
     stm = I[0][i] #remove inner brackets hack...
-    a = .02
-    b = .2
-    c = -65
-    d = 2
-    
-    vi = -65
-    ui = b * vi #(izh 2003)
-    
+
+    vi = vList[i-1]
+    ui = uList[i-1]
     uOut, vOut = izh(.025, vi, ui, a, b, c, d, stm)
     
     vList.append(vOut)
-#plt.matshow(I[0])
-plt.plot(vList, range(time))
+    uList.append(uOut)
+
+#Plotting
+plt.style.use('fivethirtyeight')
+plt.title('Regular Spiking')
+plt.xlabel('Time (ms)')
+plt.ylabel('Voltage (mV)')
+plt.plot(range(time), I[0], 'y', label='I')
+plt.plot(range(time), vList[0:4000], label='V')
 plt.show()
 
 
