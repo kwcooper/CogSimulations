@@ -6,8 +6,8 @@ import networkx as nx
 #needs random starting point
 #[ROW][Collumn]
 
-numNeurons = 50
-steps = 1
+numNeurons = 5
+steps = 2
 maxTme = int(np.ceil(steps/.025))
 
 
@@ -28,7 +28,7 @@ tMinusZs = np.zeros((numNeurons, maxTme-1), dtype=np.float32)
 
 #concat random start with the zero matrix at axis 1
 vMat = np.append(-65 * np.random.randint(2, size=(numNeurons, 1)), tMinusZs, 1)
-print('vMat:\n', vMat)
+#xprint('vMat:\n', vMat)
 uMat = 0. * np.random.randint(2, size=(numNeurons, maxTme))
 #uMat = np.append(0.0 * np.random.randint(2, size=(numNeurons, 1)), tMinusZs, 1)
 
@@ -71,10 +71,12 @@ t = 0
 cnt = int(np.ceil(steps/.025))
 step = 0
 
+Is = []
 while step < cnt:
     #iterate through each neuron, i
     for i in range(0, numNeurons):
-        I = getI(vMat, connect, i, step, 0)
+        I = getI(vMat, connect, i, step, 5)
+        Is.append(I)
 
         u = uMat[i][step]
         v = vMat[i][step]
@@ -86,7 +88,7 @@ while step < cnt:
         a = .02
         b = .2
         c = -65.
-        d = 2.
+        d = 8.
         dt = dtMat[i]
         
         if v > 25:
@@ -94,11 +96,13 @@ while step < cnt:
             v = c
             u = u + d
             
-        dv = (.04 *( v ** 2)) + (5 * v) + 140 - u + 5
+            
+        dv = (.04 *( v ** 2)) + (5 * v) + 140 - u + I
         du = a * ((b*v) - u)
 
         v = v + dt*dv
         u = u + dt*du
+
 
         #update the next time step...
         #has to be a better way to get around the out of bounds error
@@ -120,5 +124,6 @@ plt.title('Post-Spikes')
 
 plt.subplot(1,2,2)
 plt.imshow(vMat, cmap=plt.cm.gray)
+cbar = plt.colorbar()
 plt.title('Post-Voltage')
 plt.show()
