@@ -102,7 +102,8 @@ for j in range(steps): #steps - 1?
 plt.style.use('fivethirtyeight')
 for i in range(0,5):
     plt.subplot(2,3,i+1)
-    plt.title('cell ' + str(i))
+    plt.title('cell ' + str(i+1))
     plt.plot(vMat[i])
+    
 plt.show()
 
