@@ -72,7 +72,7 @@ plt.title('Regular Spiking')
 plt.xlabel('Time (ms)')
 plt.ylabel('Voltage (mV)')
 plt.plot(range(time), I[0], 'y', label='I')
-plt.plot(range(time), vList[0:4000], label='V')
+plt.plot(range(time), vList[0:4000], label='V') #the timestamps are hardcoded
 plt.show()
 
 
