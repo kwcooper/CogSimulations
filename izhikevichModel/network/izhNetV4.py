@@ -18,7 +18,7 @@ thresh = -50 #need to find a more accurate threshold
 bias = 5 #izhivech 2003 used 5 * rnd for init, then used an S varible for the weights
 
 dt = .025 #don't touch this
-duration = 20 #needs to be an even number ; 100 = 4000 steps; 10 = 400
+duration = 100 #needs to be an even number ; 100 = 4000 steps; 10 = 400
 steps = int(duration / dt) #total steps
 tmeSplt = steps/2 
 
