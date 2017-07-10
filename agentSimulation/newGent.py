@@ -24,7 +24,7 @@ class Agent:
 
     def sense(self, goal):
         self.goal = goal
-        d = self.distanceTo(self.goal)
+        d = pl.distanceTo(self.pos, self.goal)
         dist = pl.subV(self.goal, self.pos)
         if dist < (.5, .5):
             self.capd = False
@@ -60,21 +60,6 @@ class Agent:
        
 
     
-# Calculate the magnitude of the vector: 
-def magnitude(v):
-    return math.sqrt(v[0] ** 2 + v[1] ** 2)
-    
-# Converts a vector to a unit vector (maximum length of 1):
-def normalize(v):
-    return divide(v, magnitude(v))
-   
-# Scales a vector so its magnitude is equivalent to a scalar (a number):
-def clamp(v, s):
-    m = magnitude(v)
-    if m > 0:
-        return multiply(v, s / m)
-    else:
-        return v
 
 
         

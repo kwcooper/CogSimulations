@@ -40,10 +40,10 @@ def clampV(v, s):
         return v
 
 #Find the distance between two points
-def distance(self):
-    return math.sqrt(self.pos[0] ** 2 + self.pos[1] ** 2)
+def distance(in1):
+    return math.sqrt(in1[0] ** 2 + in1[1] ** 2)
 
-#Find the distace
-def distanceTo(self, inpt):
-    return math.sqrt((self.pos[0] - inpt[0]) ** 2 + (self.pos[1] - inpt[1]) ** 2)
+#Find the distace between two sets of points
+def distanceTo(in1, in2):
+    return math.sqrt((in1[0] - in2[0]) ** 2 + (in1[1] - in2[1]) ** 2)
 
