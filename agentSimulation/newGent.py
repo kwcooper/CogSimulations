@@ -31,8 +31,6 @@ class Agent:
         elif dist > (.5, .5):
             self.capd = False
             print(dist)
-            
-
 
     def think(self):
         # Sum the vectors from different functions
@@ -57,35 +55,10 @@ class Agent:
             self.goalD.pendown()
     
 
-
-    def distance(self):
-        return math.sqrt(self.pos[0] ** 2 + self.pos[1] ** 2)
-
     def distanceTo(self, inpt):
         return math.sqrt((self.pos[0] - inpt[0]) ** 2 + (self.pos[1] - inpt[1]) ** 2)
        
-        
-  
-       
 
-    
-# Vector functions:
-    
-# Add two vectors together:
-def add(v1, v2):
-    return (v1[0] + v2[0], v1[1] + v2[1])
-    
-# Subtract one vector from another:
-def subtract(v1, v2):
-    return (v1[0] - v2[0], v1[1] - v2[1])
-    
-# Multiply a vector's components by a scalar (a number):
-def multiply(v, s):
-    return (v[0] * s, v[1] * s)
-    
-# Divide a vector's components by a scalar (a number):
-def divide(v, s):
-    return (v[0] / s, v[1] / s)
     
 # Calculate the magnitude of the vector: 
 def magnitude(v):
@@ -105,19 +78,17 @@ def clamp(v, s):
 
 
         
-
-
-def simulateBoids(duration):
+# Run the simulation:
+def runSim(duration):
     a = Agent(2, 0.15, True)
     goal = (random.randint(0,100), random.randint(0,100))
-    # Run the simulation:
     for i in range(duration):
         
-        goal = (goal[0] + random.randint(-20,20), goal[1] + random.randint(-20,20))
+        #goal = (goal[0] + random.randint(-20,20), goal[1] + random.randint(-20,20))
         a.sense(goal)
         a.think()
         a.move()
 
-simulateBoids(1000)
+runSim(1000)
 
 

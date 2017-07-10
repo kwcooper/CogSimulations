@@ -1,3 +1,5 @@
+import math
+
 def addV(v1, v2):
     return (v1[0] + v2[0], v1[1] + v2[1])
     
@@ -29,7 +31,6 @@ def dotV(v1, v2):
 def thetaV(v1, v2):
     return cos(dot(v1, v2) / (magV(v1) * magV(v2)))
     
-
 # Scales a vector so its magnitude is equivalent to a scalar (a number):
 def clampV(v, s):
     m = magV(v)
@@ -37,4 +38,12 @@ def clampV(v, s):
         return multV(v, s / m)
     else:
         return v
+
+#Find the distance between two points
+def distance(self):
+    return math.sqrt(self.pos[0] ** 2 + self.pos[1] ** 2)
+
+#Find the distace
+def distanceTo(self, inpt):
+    return math.sqrt((self.pos[0] - inpt[0]) ** 2 + (self.pos[1] - inpt[1]) ** 2)
 
