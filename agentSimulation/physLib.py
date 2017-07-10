@@ -1,6 +1,3 @@
-location = [x,y]
-velocity = [x,y]
-
 def addV(v1, v2):
     return (v1[0] + v2[0], v1[1] + v2[1])
     
@@ -25,16 +22,16 @@ def normV(v):
     return divide(v, magnitude(v))
 
 #converts two vectors into a scaler
-def dot(v1, v2):
+def dotV(v1, v2):
     return v1[0] * v2[0] + v1[1] * v2[1]
 
 #FInds the angle between two vectors
-def theta(v1, v2):
+def thetaV(v1, v2):
     return cos(dot(v1, v2) / (magV(v1) * magV(v2)))
     
 
 # Scales a vector so its magnitude is equivalent to a scalar (a number):
-def clamp(v, s):
+def clampV(v, s):
     m = magV(v)
     if m > 0:
         return multV(v, s / m)

@@ -1,9 +1,8 @@
-#Keiland C and Christian A.
-#based off boids code
 
 import random
 import math
 import turtle
+import physLib as pl
 
 class Agent:
     def __init__(self, maxV, maxF, turtleON = True):
@@ -26,7 +25,7 @@ class Agent:
     def sense(self, goal):
         self.goal = goal
         d = self.distanceTo(self.goal)
-        dist = subtract(self.goal, self.pos)
+        dist = pl.subV(self.goal, self.pos)
         if dist < (.5, .5):
             self.capd = False
         elif dist > (.5, .5):
@@ -38,17 +37,17 @@ class Agent:
     def think(self):
         # Sum the vectors from different functions
         if self.capd == False:
-            dist = subtract(self.goal, self.pos)
+            dist = pl.subV(self.goal, self.pos)
             # Add the acceleration to the velocity:
-            self.v = add(self.v, dist)
+            self.v = pl.addV(self.v, dist)
             # crop speed by maximum velocity:
-            self.v = clamp(self.v, self.maxV)
+            self.v = pl.clampV(self.v, self.maxV)
         else:
             self.pos = self.pos
         
     def move(self):
         if self.capd == False:
-            self.pos = add(self.pos, self.v)
+            self.pos = pl.addV(self.pos, self.v)
         if self.turtleON:
             self.turtle.penup()
             self.turtle.setheading(math.atan2(self.v[1], self.v[0]) * 180 / math.pi)
@@ -113,8 +112,8 @@ def simulateBoids(duration):
     goal = (random.randint(0,100), random.randint(0,100))
     # Run the simulation:
     for i in range(duration):
-        if i % 50 == 0:
-            goal = (random.randint(0,100), random.randint(0,100))
+        
+        goal = (goal[0] + random.randint(-20,20), goal[1] + random.randint(-20,20))
         a.sense(goal)
         a.think()
         a.move()
