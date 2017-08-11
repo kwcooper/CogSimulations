@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 #Python implimentation of (Izhikevich 2003) "Simple Model of Spiking Neurons"
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx #only required if you want to visualize the network
-#to do: 
+#bugs:
+#   Why does cell 1 always go to 0?
+
+#to do:
 #   parameter dictionary?, think of something that can be altered with a genetic algorithm 
 #   function to create I according to specifications
 #   create S parameter for getInput function to model weights
@@ -13,7 +17,7 @@ import networkx as nx #only required if you want to visualize the network
 #   create custom connectome/sparce connectome
 
 ## Set Up
-numNeurons = 5
+numNeurons = 40
 thresh = -50 #need to find a more accurate threshold
 bias = 5 #izhivech 2003 used 5 * rnd for init, then used an S varible for the weights
 
@@ -100,8 +104,12 @@ for j in range(steps): #steps - 1?
 #Plotting
 #this type is only feasible with a low cell count
 plt.style.use('fivethirtyeight')
-for i in range(0,5):
-    plt.subplot(2,3,i+1)
+plotDem = 8
+showCells = 40
+if numNeurons < showCells:
+    showCells = numNeurons
+for i in range(0,showCells):
+    plt.subplot(plotDem,plotDem,i-1)
     plt.title('cell ' + str(i+1))
     plt.plot(vMat[i])
     
