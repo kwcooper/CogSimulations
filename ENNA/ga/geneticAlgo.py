@@ -1,4 +1,8 @@
 #Mit
+
+#this code needs some work.....
+
+
 # probablility of selection = fitness
 #probability of selection = realitive fitness
 #probability of fitness = realitive fitness and the max diversity
@@ -24,7 +28,7 @@
 
 import random
 
-goal = "genetic algorithm"
+goal = "This is the genetic string"
 features = "abcdefghijklmnopqrstuvwxyz "
 goalLength = len(goal)
 popSize = 10
@@ -195,7 +199,7 @@ while fitHuh == False:
     #print("new Pop: ", pop)
 
     itterations += 1
-    if itterations == 1000:
+    if itterations == 10000:
         print("over 10000")
         break
 print(pop)

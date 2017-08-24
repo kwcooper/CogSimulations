@@ -1,117 +1,145 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#To do: abstract the layering in the network
 
-#Python implimentation of (Izhikevich 2003) "Simple Model of Spiking Neurons"
+import random
 import numpy as np
 import matplotlib.pyplot as plt
-import networkx as nx #only required if you want to visualize the network
-#bugs:
-#   Why does cell 1 always go to 0?
 
-#to do:
-#   parameter dictionary?, think of something that can be altered with a genetic algorithm 
-#   function to create I according to specifications
-#   create S parameter for getInput function to model weights
-#   create ability for excitatory & inhibatory
-#   create each neuron has it's on a-d parameters... (marticies for them)
-#   create custom connectome/sparce connectome
+class Layer():
+    def __init__(self, numNeurons, numInputs):
+        #creates a random matix of inputted size (inputs by neurons)
+        self.weights = 2 * np.random.random((numInputs, numNeurons)) - 1
 
-## Set Up
-numNeurons = 40
-thresh = -50 #need to find a more accurate threshold
-bias = 5 #izhivech 2003 used 5 * rnd for init, then used an S varible for the weights
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
 
-dt = .025 #don't touch this
-duration = 100 #needs to be an even number ; 100 = 4000 steps; 10 = 400
-steps = int(duration / dt) #total steps
-tmeSplt = steps/2 
+# The derivative of the Sigmoid function to calculate error
+def derivative(x):
+    return x * (1 - x)
 
-tMinusZs = np.zeros((numNeurons, steps), dtype=np.float32)
+#the neural network
+class Net():
+    #can this be modded into n layers?
+    def __init__(self):
+        self.layer1 = Layer(4, 2)
+        self.layer2 = Layer(1, 4)
+        self.startWeights = []
+        self.errors = []
 
-#Parameters (RS)
-a = .02
-b = .2
-c = -65
-d = 2
+        self.e1 = []
+        self.e2 = []
+        self.e3 = []
+        self.e4 = []
 
-#V and U matricies holding values for all timesteps
-vMat = np.append(-65 * np.random.randint(2, size=(numNeurons, 1)), tMinusZs, 1)
-uMat = np.append((b * -65) * np.random.randint(2, size=(numNeurons, 1)), tMinusZs, 1) #(izh 2003)
-
-#network connectome
-connect = np.random.randint(2, size=(numNeurons, numNeurons))
-#plots the connectome
-plt.imshow(connect, cmap=plt.cm.gray)
-plt.title('connectome')
-plt.show()
-
-#plots the network graph (requires networkx)
-G = nx.from_numpy_matrix(connect)
-print('graph')
-nx.draw(G)
-plt.show()
-
-#holds the spiking of the neurons ec. raster plot
-spikes = np.zeros((numNeurons, steps), dtype=np.float32)
-
-#Izh equation
-def izh(dt, v, u, a, b, c, d, I):
-    if v > 30:
-        v = c
-        u = u + d
-
-    dv = (.04 *( v ** 2)) + (5 * v) + 140 - u + I
-    du = a * ((b*v) - u)
+    # The network thinks.
+    def forward(self, inputs):
+        outLayer1 = sigmoid(np.dot(inputs, self.layer1.weights))
+        outLayer2 = sigmoid(np.dot(outLayer1, self.layer2.weights))
+        return outLayer1, outLayer2
     
-    v = v + dt*dv
-    u = u + dt*du
-    return u, v
-
-#iterates through fired, if connection, then increments input I
-#this could be where hebbian learning etc. could be implimented
-def getInput(numNeurons, vMat, connect, i, j, thresh, bias):
-    I = 0
-    for jj in range(0, numNeurons):
-        #look at the current cell, i in connect, then iterate 
-        #through each of it's connections. If there is a connection
-        #then look at the vMat's voltage for that cell, jj, during the
-        #current time step, j . if it is > thresh, increment I.  
-        if connect[i][jj] == 1 and vMat[jj][j] > thresh:
-            I += 1
-    #print('Found ', I)
-    return I + bias
-
-## Simulation
-t = 0
-for j in range(steps): #steps - 1?
-    for i in range(1, numNeurons):
-        stm = getInput(numNeurons, vMat, connect, i, j, thresh, bias)
-            
-        #Neuron 1
-        vi = vMat[i][j]
-        ui = uMat[i][j]
-        
-        uOut, vOut = izh(.025, vi, ui, a, b, c, d, stm)
-        
-        if vOut > thresh:
-            spikes[i][j] = 1
-        
-        vMat[i][j+1] = vOut
-        uMat[i][j+1] = uOut
-        
-        
-
-#Plotting
-#this type is only feasible with a low cell count
-plt.style.use('fivethirtyeight')
-plotDem = 8
-showCells = 40
-if numNeurons < showCells:
-    showCells = numNeurons
-for i in range(0,showCells):
-    plt.subplot(plotDem,plotDem,i-1)
-    plt.title('cell ' + str(i+1))
-    plt.plot(vMat[i])
     
-plt.show()
+    def train(self, trainingInputs, targets, iterations):
+        for iteration in range(iterations):
+            outputLayer1, outputLayer2 = self.forward(trainingInputs)
+
+            errorLayer2 = targets - outputLayer2
+            deltaLayer2 = errorLayer2 * derivative(outputLayer2)
+
+            #error data
+            self.errors.append(errorLayer2[0])
+            self.e1.append(errorLayer2[0])
+            self.e2.append(errorLayer2[1])
+            self.e3.append(errorLayer2[2])
+            self.e4.append(errorLayer2[3])
+
+            errorLayer1 = deltaLayer2.dot(self.layer2.weights.T)
+            deltaLayer1 = errorLayer1 * derivative(outputLayer1)
+
+            adjustmentLayer1 = trainingInputs.T.dot(deltaLayer1)
+            adjustmentLayer2 = outputLayer1.T.dot(deltaLayer2)
+
+            self.layer1.weights += adjustmentLayer1
+            self.layer2.weights += adjustmentLayer2
+
+
+    # The neural network prints its weights
+    def showWeights(self, strt):
+        print("First Layer: ")
+        print(self.layer1.weights)
+        print( "Second Layer: ")
+        print(self.layer2.weights.T)
+        if strt == False:
+            pss = '(Start)'
+        elif strt == True:
+            pss = '(End)'
+            # if you prefur imshow gradients...
+        plt.style.use('fivethirtyeight')
+        plt.subplot(2,1,1)
+        plt.imshow(self.layer1.weights, cmap="Greys", interpolation='nearest')
+        plt.axis('off')
+        plt.title('First Layer Weights ' + pss)
+        
+        plt.subplot(2,1,2)
+        plt.imshow(self.layer2.weights, cmap="Greys", interpolation='nearest')
+        plt.axis('off')
+        plt.title('Second Layer Weights')
+        plt.show()
+
+    def showError(self):
+        plt.plot(self.errors)
+        plt.style.use('fivethirtyeight')
+        plt.title('Training Error')
+        plt.show()
+
+    def showAllErrors(self):
+        plt.plot(self.e1, label='e1')
+        plt.plot(self.e2, label='e2')
+        plt.plot(self.e3, label='e3')
+        plt.plot(self.e4, label='e4')
+        plt.style.use('fivethirtyeight')
+        plt.title('Training Error')
+        plt.legend()
+        plt.show()
+
+
+def tstArray(n):
+    outMat = np.zeros((n,n))
+    for ii in range(0,n):
+        for jj in range(0,n):
+            hidden, output = net.forward(np.array((ii / n,jj / n)))
+            outMat[ii,jj] = output[0]
+    plt.imshow(outMat, interpolation='nearest')
+    plt.show()
+    return outMat
+
+#run the network
+net = Net()
+
+print("RANDOM WEIGHTS: ")
+net.showWeights(False)
+print(' ')
+trainingInputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+targets = np.array([[1, 0, 0, 1]]).T
+
+net.train(trainingInputs, targets, 60000)
+
+print("NEW WEIGHTS:")
+net.showWeights(True)
+print(' ')
+
+net.showError()
+net.showAllErrors()
+
+print( "Test the network: ")
+hidden, output = net.forward(np.array([1, 1]))
+print('We expect 1, we got: ', "(", round(output[0]), ")", output)
+hidden, output = net.forward(np.array([1, 0]))
+print('We expect 0, we got: ', "(", round(output[0]), ")", output)
+hidden, output = net.forward(np.array([0, 0]))
+print('We expect 1, we got: ', "(", round(output[0]), ")", output)
+#print(hidden)
+
+#tests on a wide array of data
+tstArray(30)
+
+
 
