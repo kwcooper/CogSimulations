@@ -70,11 +70,10 @@ def tstWlk(gent, wld):
     loWld = []
     xPos = 0
     yPos = 0
-    tmpWld = wld 
     for i in range(3):
-       newWld = udAgentPos(tmpWld, [xPos, yPos])
-       loWld.append(newWld)
-       tmpWld = wld
+       newWld = udAgentPos(wld, [xPos, yPos])
+       #copy the array to prevent the list of arrays from all updating
+       loWld.append(np.copy(newWld))
        xPos += 1
     return loWld
 
