@@ -20,7 +20,8 @@ def makeWrld(shape, wSze):
     #print(newWrld)
     return newWrld
 
-def drwWld():
+def drwWld(wld):
+    print(wld)
     
 
 #this is for making a new one?
@@ -46,7 +47,7 @@ def drawWrld(sze, agnt, rep, new=False, *wld):
 ##                    print("*", " ", end='')
 ##                else:
 ##                    print(wld[0][i][j], " ", end='')
-        print(wld[0])
+        print(wld)
     else:
         #one method to print np arrays
         #newW = ' '.join(map(str, wrld))
@@ -61,10 +62,29 @@ def drawWrld(sze, agnt, rep, new=False, *wld):
 
         
 def udAgentPos(wld, pos):
-    wld[pos[0]][pos[1]] = 1
+    wld[pos[0]][pos[1]] = 5
     return wld
 
-def tstWlk()
+def tstWlk(gent, wld):
+    #this function mutates all the other arrays in loWld (list of wrld)
+    loWld = []
+    xPos = 0
+    yPos = 0
+    tmpWld = wld 
+    for i in range(3):
+       newWld = udAgentPos(tmpWld, [xPos, yPos])
+       loWld.append(newWld)
+       tmpWld = wld
+       xPos += 1
+    return loWld
+
+
+def gentMveLogic(pos, goal):
+    xDiff = pos[0] - goal[0]
+    yDiff = pos[1] - goal[1]
+
+    
+        
 
 
 ##drawWrld(wSze, "V", [1,1], False, wrld)
@@ -78,6 +98,13 @@ wSze = 6
 agnt = [0,0]
 
 wrld = makeWrld("T", wSze)
-drawWrld(wSze, "V", [1,1], True, wrld)
+#drawWrld(wSze, "V", [1,1], True, wrld)
+drwWld(wrld)
 
 
+sim = tstWlk([0,0],wrld)
+
+##for i in sim:
+##    print(i)
+##    print()
+    
