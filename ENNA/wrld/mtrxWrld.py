@@ -2,6 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+#to do:
+#  What is needed in general from the world?
+#  Need a much better display mech, especially for multiple frames
+#  A way to relay the trajectory better 
 
 def makeWrld(shape, wSze):
     if shape == "squ":
