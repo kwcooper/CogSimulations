@@ -86,28 +86,40 @@ def gentMveLogic(pos, goal):
     xDiff = pos[0] - goal[0]
     yDiff = pos[1] - goal[1]
 
-    
-        
+def moveGent(agent, direction):
+    if direction == 1:
+        agent[0] + 1
+    elif direction == 2:
+        agent[0] - 1
+    elif direction == 3:
+        agent[1] + 1
+    elif direction == 4:
+        agent[1] - 1
+    return agent
+#need to make the list version of this
+
 
 
 ##drawWrld(wSze, "V", [1,1], False, wrld)
 ##udAgentPos(wrld, [0,0])
 ##drawWrld(wSze, "V", [1,1], False, wrld)
 
+if __name__ == "__main__":
+    print()
 
-print()
+    wSze = 6
+    agnt = [0,0]
 
-wSze = 6
-agnt = [0,0]
-
-wrld = makeWrld("T", wSze)
-#drawWrld(wSze, "V", [1,1], True, wrld)
-drwWld(wrld)
+    wrld = makeWrld("T", wSze)
+    #drawWrld(wSze, "V", [1,1], True, wrld)
+    drwWld(wrld)
 
 
-sim = tstWlk([0,0],wrld)
+    sim = tstWlk([0,0],wrld)
 
-##for i in sim:
-##    print(i)
-##    print()
+    ##for i in sim:
+    ##    print(i)
+    ##    print()
+    newGent = moveGent(agnt, 1)
+
     
