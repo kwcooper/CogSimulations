@@ -35,12 +35,17 @@ while iterations > 0:
     x,i = getRandom(inpt)
     netVal = calculateNet(x[0],x[1],w[0],w[1])
     net = threshold(netVal,threshVal)
+    #print("inpt",inpt[i],"net:", net)
     if net != outpt[i]:
         outError = calculateError(outpt[i], net)
         w1 += learnRate * outError * x[0]
         w2 += learnRate * outError * x[1]
         w = [w1,w2]
-        
+    else:
+        print("no weights calculated for", inpt[i])
+
+    print(inpt[i], w[0],w[1])
+    
     learnedOut[i] = net
     
     if iterations == 1000:
