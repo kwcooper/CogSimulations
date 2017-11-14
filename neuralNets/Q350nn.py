@@ -20,8 +20,8 @@ def calculateError(y,yHat):
 
 
 inpt = [[1,1],[1,-1],[-1,1],[-1,-1]]
-#outpt = [1,-1,-1,-1] #conjunction
-outpt = [1,1,1,-1] #disjunction
+outpt = [1,-1,-1,-1] #conjunction
+#outpt = [1,1,1,-1] #disjunction //currently has trouble calculating
 
 learnRate = .2
 threshVal = .4
@@ -29,7 +29,7 @@ w1 = -.1
 w2 = .4
 w = [w1,w2]
 learnedOut = [0,0,0,0]
-iterations = 2000
+iterations = 5000
 
 while iterations > 0:
     x,i = getRandom(inpt)
@@ -42,9 +42,10 @@ while iterations > 0:
         w2 += learnRate * outError * x[1]
         w = [w1,w2]
     else:
-        print("no weights calculated for", inpt[i])
+        pass
+        #print("no weights calculated for", inpt[i])
 
-    print(inpt[i], w[0],w[1])
+    #print(inpt[i], w[0],w[1])
     
     learnedOut[i] = net
     
