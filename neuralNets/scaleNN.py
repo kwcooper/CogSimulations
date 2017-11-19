@@ -5,4 +5,11 @@
 
 # what would the connectome of a multilayer net look like?
 
+connectome = np.sparse(1,1)
+
+
+for i in range(0,len(connectome):
+    for j in range(0, len(i):
+        if connectome[i][j] == 1:
+            
 
