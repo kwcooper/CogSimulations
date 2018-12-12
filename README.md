@@ -1,3 +1,3 @@
 # CogSciSimulations
 
-An assortment of cognative science/ computational Neuroscience simulations. 
+An assortment of cognitive science/ computational Neuroscience simulations. 
